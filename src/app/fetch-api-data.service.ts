@@ -26,7 +26,11 @@ export class FetchApiDataService {
   public userLogin(userDetails: any): Observable<any> {
     console.log(userDetails);
     return this.http
-      .post(apiUrl + 'login', userDetails)
+      .post<any>(`${apiUrl}login`, userDetails, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json' // Ensure the correct content type
+        })
+      })
       .pipe(catchError(this.handleError));
   }
 

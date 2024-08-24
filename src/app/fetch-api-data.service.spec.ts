@@ -44,15 +44,22 @@ describe('FetchApiDataService', () => {
   });
 
   it('should log in a user', () => {
-    const userDetails = {username: 'testuser', password: 'password123'};
+    const userDetails = { username: 'testuser', password: 'password123' };
     const mockResponse = { token: 'fake-token' };
-
-    service.userLogin(userDetails).subscribe(response => {
-      expect(response).toEqual(mockResponse);
+  
+    service.userLogin(userDetails).subscribe({
+      next: (response) => {
+        expect(response).toEqual(mockResponse);
+      },
+      error: (error) => {
+        fail('Request failed with error: ' + error.message);
+      }
     });
-
+  
     const req = httpMock.expectOne(`${apiUrl}login`);
     expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(userDetails);
+    expect(req.request.headers.get('Content-Type')).toBe('application/json');
     req.flush(mockResponse);
   });
 
