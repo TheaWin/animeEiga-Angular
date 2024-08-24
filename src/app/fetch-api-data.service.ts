@@ -117,28 +117,32 @@ export class FetchApiDataService {
     console.log(username);
     console.log(movieName);
     const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + token,
+    });
+  
     return this.http
-      .post<Response>(apiUrl + 'users/' + username + '/' + movieName, {
-        headers: new HttpHeaders({
-          Authorization: 'Bearer ' + token,
-        }),
-      })
-      .pipe(map(this.extractResponseData),
-        catchError(this.handleError));
-  } 
+      .post<Response>(`${apiUrl}users/${username}/${movieName}`, {}, { headers }) // Pass headers in options parameter
+      .pipe(
+        map(this.extractResponseData),
+        catchError(this.handleError)
+      );
+  }  
 
   // Making the api call for Edit user
   public editUser(username: string): Observable<any> {
     console.log(username);
     const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + token,
+    });
+  
     return this.http
-      .put<Response>(apiUrl + 'users/' + username, {
-        headers: new HttpHeaders({
-          Authorization: 'Bearer ' + token,
-        }),
-      })
-      .pipe(map(this.extractResponseData),
-        catchError(this.handleError));
+      .put<Response>(`${apiUrl}users/${username}`, {}, { headers }) // Pass headers in options parameter
+      .pipe(
+        map(this.extractResponseData),
+        catchError(this.handleError)
+      );
   }
 
   // Making the api call for Delete user

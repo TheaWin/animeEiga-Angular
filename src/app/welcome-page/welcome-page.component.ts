@@ -9,6 +9,8 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrl: './welcome-page.component.scss'
 })
 export class WelcomePageComponent implements OnInit {
+  title = 'AnimeEiga';
+
   constructor(public dialog: MatDialog) { }
   ngOnInit(): void {
   }

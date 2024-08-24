@@ -6,7 +6,7 @@ import { FetchApiDataService } from '../fetch-api-data.service';
   templateUrl: './movie-card.component.html',
   styleUrl: './movie-card.component.scss'
 })
-export class MovieCardComponent {
+export class MovieCardComponent implements OnInit{
   movies: any[] = [];
   constructor(public fetchApiData: FetchApiDataService) { }
 
