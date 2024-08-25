@@ -1,0 +1,15 @@
+<mat-toolbar class="navbar" color="primary">
+  <span (click)="openMovies()" class="logo-name">
+    AnimeEiga
+  </span>
+  <span class="spacer"></span>
+  <button mat-icon-button aria-label="Movie button with home icon" (click)="openMovies()">
+    <mat-icon class="light-icon">home</mat-icon>
+  </button>
+  <button mat-icon-button aria-label="Profile button with person icon" (click)="openProfile()">
+    <mat-icon class="light-icon">person</mat-icon>
+  </button>
+  <button mat-icon-button aria-label="Logout button with logout icon" (click)="logOutUser()">
+    <mat-icon class="light-icon">logout</mat-icon>
+  </button>
+</mat-toolbar>

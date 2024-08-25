@@ -1,0 +1,17 @@
+@import '@angular/material/prebuilt-themes/pink-bluegrey.css';
+
+.welcome-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5rem;
+  background-color: rgba(98, 0, 234, 0.1);
+  text-align: center;      
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;          
+}

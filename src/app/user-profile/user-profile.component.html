@@ -1,51 +1,56 @@
-<mat-card style="width: 60%; margin: 50px auto; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
-  <mat-card-header>
+<app-nav-bar></app-nav-bar>
+
+<mat-card class="profile-info">
+  <mat-card-header class="profile-title">
     <mat-card-title>User Profile</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <form *ngIf="isEditing" style="display: flex; flex-direction: column; gap: 20px; margin: 20px auto;">
+    <form *ngIf="isEditing" class="profile-edit-form">
+      <mat-label>Username</mat-label>
       <mat-form-field>
-        <input matInput [(ngModel)]="userData.username" placeholder="Username" name="username" required readonly>
+        <input matInput [(ngModel)]="userData.username" placeholder="Username" name="username" readonly>
+        <mat-hint>Username can't be changed</mat-hint>
       </mat-form-field>
+      <mat-label>Name</mat-label>
       <mat-form-field>
         <input matInput [(ngModel)]="userData.name" placeholder="Name" name="name" required>
       </mat-form-field>
+      <mat-label>Email</mat-label>
       <mat-form-field>
         <input matInput [(ngModel)]="userData.email" placeholder="Email" name="email" type="email" required>
       </mat-form-field>
+      <mat-label>Birthday</mat-label>
       <mat-form-field>
         <input matInput [(ngModel)]="userData.birthday" placeholder="Birthday" name="birthday" type="date">
       </mat-form-field>
-      <button mat-raised-button (click)="editUser()" color="primary">Save Changes</button>
-      <button mat-raised-button (click)="isEditing = false" color="warn">Cancel</button>
+      <div class="button-container">
+        <button mat-raised-button (click)="editUser()" color="primary">Save Changes</button>
+        <button mat-raised-button (click)="isEditing = false" color="warn">Cancel</button>
+      </div>
     </form>
 
     <div *ngIf="!isEditing">
-      <p><strong>Username:</strong> {{userData.username}}</p>
-      <p><strong>Name:</strong> {{userData.name}}</p>
-      <p><strong>Email:</strong> {{userData.email}}</p>
-      <p><strong>Birthday:</strong> {{userData.birthday}}</p>
-      <button mat-raised-button (click)="isEditing = true" color="primary">Edit Profile</button>
-      <button mat-raised-button (click)="deleteUser()" color="warn">Delete Account</button>
+      <p>Username: {{userData.username}}</p>
+      <p>Name: {{userData.name}}</p>
+      <p>Email: {{userData.email}}</p>
+      <p>Birthday: {{userData.birthday}}</p>
+      <div class="button-container">
+        <button mat-raised-button (click)="isEditing = true" color="primary">Edit Profile</button>
+        <button mat-raised-button (click)="deleteUser()" color="warn">Delete Account</button>
+      </div>
     </div>
   </mat-card-content>
 </mat-card>
 
-<mat-card
-  style="width: 60%; margin: 50px auto; display: flex; gap: 20px; flex-direction: column; justify-content: center;">
-  <mat-card-header>
-    <mat-card-title style="justify-content:flex-start;">Favorite Movies</mat-card-title>
+<mat-card class="fav-info">
+  <mat-card-header class="profile-title">
+    <mat-card-title>Favorite Movies</mat-card-title>
   </mat-card-header>
   <div *ngIf="favoriteMovies.length === 0">You have no favourite movies.</div>
-  <div style="display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-  width: 100%;">
-    <mat-card *ngFor="let movie of favoriteMovies; let i = index;" style="max-width: 300px; 
-      box-shadow: 0 4px 8px 0 rgba(245, 240, 240, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-      <img src="{{movie.imageURL}}" alt="{{movie.Name}}"
-        style="width: 100%; height: 400px; object-fit: fill; border-radius: 10px;" />
-      <mat-card-actions>
+  <div class="fav-container">
+    <mat-card *ngFor="let movie of favoriteMovies; let i = index;" class="card">
+      <img src="{{movie.imageURL}}" alt="{{movie.Name}}" class="card-image" />
+      <mat-card-actions class="card-actions">
         <button mat-button color="primary" (click)="openGenre(movie)">
           Genre
         </button>
@@ -55,7 +60,8 @@
         <button mat-button color="primary" (click)="openSypnosis(movie)">
           Details
         </button>
-        <mat-icon (click)="deleteFavoriteMovie(movie._id)" *ngIf="isFavorite(movie)">favorite</mat-icon>
+        <mat-icon (click)="deleteFavoriteMovie(movie._id)" *ngIf="isFavorite(movie._id)"
+          color="primary">favorite</mat-icon>
       </mat-card-actions>
     </mat-card>
   </div>

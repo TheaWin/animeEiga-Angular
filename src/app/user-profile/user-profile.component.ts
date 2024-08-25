@@ -70,15 +70,18 @@ export class UserProfileComponent implements OnInit{
     });
   }
 
-  deleteUser(): void{
+  deleteUser(): void {
     const username = JSON.parse(localStorage.getItem('user') || '{}').username;
-    this.fetchApiData.deleteUser(username).subscribe(() => {
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
-      this.snackBar.open('Account deleted successfully', 'OK', {duration: 2000});
-      this.router.navigate(['welcome']);
-    }, error => {
-      this.snackBar.open('Failed to delete profile', 'OK', {duration: 2000});
+    this.fetchApiData.deleteUser(username).subscribe({
+      next: () => {
+        this.snackBar.open('Account deleted successfully', 'OK', { duration: 2000 });
+        this.router.navigate(['welcome']);
+        localStorage.clear();
+      },
+      error: (err) => {
+        console.error('Error:', err);  // Log error for debugging
+        this.snackBar.open('Failed to delete profile', 'OK', { duration: 2000 });
+      }
     });
   }
 

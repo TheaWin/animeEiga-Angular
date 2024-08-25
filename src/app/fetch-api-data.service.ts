@@ -153,17 +153,18 @@ export class FetchApiDataService {
   }
 
   // Making the api call for Delete user
-  public deleteUser(username: string): Observable<any> {
+  public deleteUser(username: string): Observable<void> {
     console.log(username);
     const token = localStorage.getItem('token');
     return this.http
-      .delete<Response>(apiUrl + 'users/' + username, {
+      .delete<void>(`${apiUrl}users/${username}`, {
         headers: new HttpHeaders({
-          Authorization: 'Bearer ' + token,
+          Authorization: `Bearer ${token}`,
         })
       })
-      .pipe(map(this.extractResponseData),
-        catchError(this.handleError));
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   // Making the api call for Delete a movie from the favorite movies
@@ -198,16 +199,15 @@ export class FetchApiDataService {
     }
   }
 
-  private handleError(error: HttpErrorResponse): any {
+  private handleError(error: HttpErrorResponse): Observable<never> {
     if (error.error instanceof ErrorEvent) {
-      console.error('Some error occured:', error.error.message);
+      console.error('An error occurred:', error.error.message);
     } else {
       console.error(
-        `Error Status code ${error.status},` +
-        `Error body is: ${error.error}`);
+        `Backend returned code ${error.status}, ` +
+        `body was: ${JSON.stringify(error.error)}`);
     }
-    return throwError(() => new Error(
-      'Something bad happened; please try again later.'));
+    return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 
   private extractResponseData(res: Response): any {

@@ -147,30 +147,44 @@ describe('FetchApiDataService', () => {
     req.flush(mockUser);
   });
 
-  it('should get favourite movies for a user', () => {
+  it('should get favorite movies for a user', () => {
     const username = 'testuser';
     const mockUser = { favoriteMovies: ['Movie 1', 'Movie 2'] };
 
     spyOn(service, 'getUser').and.returnValue(of(mockUser));
 
-    service.getFavouriteMovies(username).subscribe(favouriteMovies => {
-      expect(favouriteMovies).toEqual(['Movie 1', 'Movie 2']);
+    service.getFavoriteMovies(username).subscribe(favoriteMovies => {
+      expect(favoriteMovies).toEqual(['Movie 1', 'Movie 2']);
     });
   });
 
   it('should add a movie to favorite movies', () => {
     const token = 'fake-token';
     const username = 'testuser';
-    const movieName = 'Movie 1';
-    const mockResponse = { success: true };
-  
-    spyOn(localStorage, 'getItem').and.returnValue(token);
-  
-    service.addFavouriteMovie(username, movieName).subscribe(response => {
-      expect(response).toEqual(mockResponse);
+    const movieId = '1235';
+    const mockUser = {
+      username: username,
+      favoriteMovies: ['135456', '54489']
+    };
+    const mockResponse = { success: true };  
+
+    // Mock localStorage
+    spyOn(localStorage, 'getItem').and.callFake((key) => {
+      if (key === 'token') {
+        return token;
+      } else if (key === 'user') {
+        return JSON.stringify(mockUser);
+      }
+      return null;
     });
-  
-    const req = httpMock.expectOne(`${apiUrl}users/${username}/${movieName}`);
+
+    // Mock localStorage setItem
+    spyOn(localStorage, 'setItem');  
+      service.addFavoriteMovie(movieId).subscribe(response => {
+        expect(response).toEqual(mockResponse);
+    });
+ 
+    const req = httpMock.expectOne(`${apiUrl}users/${username}/${movieId}`);
     expect(req.request.method).toBe('POST');
     expect(req.request.headers.get('Authorization')).toBe('Bearer ' + token);
     req.flush(mockResponse);
@@ -213,18 +227,37 @@ describe('FetchApiDataService', () => {
   it('should delete a movie from favorite movies', () => {
     const token = 'fake-token';
     const username = 'testuser';
-    const movieName = 'Movie 1';
-    const mockResponse = { success: true };
+    const movieId = '123';
+    const mockUser = { 
+      username: username,
+      favoriteMovies: ['123414', '35359']
+    };
+    const mockResponse = {success: true};
 
-    spyOn(localStorage, 'getItem').and.returnValue(token);
-
-    service.deleteFavouriteMovie(username, movieName).subscribe(response => {
-      expect(response).toEqual(mockResponse);
+    spyOn(localStorage, 'getItem').and.callFake((key) => {
+      if (key === 'token') {
+        return token;
+      } else if (key === 'user') {
+        return JSON.stringify(mockUser);
+      }
+      return null;
     });
 
-    const req = httpMock.expectOne(`${apiUrl}users/${username}/${movieName}`);
-    expect(req.request.method).toBe('DELETE');
-    expect(req.request.headers.get('Authorization')).toBe('Bearer ' + token);
-    req.flush(mockResponse);
+    spyOn(localStorage, 'setItem');
+
+    service.deleteFavoriteMovie(movieId).subscribe(response => {
+    expect(response).toEqual(mockResponse);
+
+    // Check that the movie was removed from favoriteMovies
+    expect(mockUser.favoriteMovies).not.toContain(movieId);
+
+    // Check that localStorage was updated correctly
+    expect(localStorage.setItem).toHaveBeenCalledWith('user', JSON.stringify(mockUser));
+  });
+
+  const req = httpMock.expectOne(`${apiUrl}users/${username}/${movieId}`);
+  expect(req.request.method).toBe('DELETE');
+  expect(req.request.headers.get('Authorization')).toBe('Bearer ' + token);
+  req.flush(mockResponse);
   });
 });
