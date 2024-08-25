@@ -77,23 +77,21 @@ export class UserProfileComponent implements OnInit{
     });
   }
 
-  addFavoriteMovie(movieName: string): void {
-    const username = JSON.parse(localStorage.getItem('user') || '{}').username;
-    this.fetchApiData.addFavouriteMovie(username, movieName).subscribe(() => {
-      this.loadUserProfile();
-      this.snackBar.open('Movie added to favorites', 'OK', { duration: 2000 });
-    }, error => {
-      this.snackBar.open('Failed to add movie to favorites', 'OK', { duration: 2000 });
+  isFavorite(movieId: string): boolean {
+    return this.fetchApiData.isFavoriteMovies(movieId);
+  }
+
+  addFavoriteMovie(movieId: string): void {
+    this.fetchApiData.addFavoriteMovie(movieId).subscribe(() => {
+      console.log('addFav called');
+      this.snackBar.open('Added to favorites', 'OK', {duration: 2000});
     });
   }
 
-  deleteFavoriteMovie(movieName: string): void {
-    const username = JSON.parse(localStorage.getItem('user') || '{}').username;
-    this.fetchApiData.deleteFavouriteMovie(username, movieName).subscribe(() => {
-      this.loadUserProfile();
-      this.snackBar.open('Movie removed from favorites', 'OK', { duration: 2000 });
-    }, error => {
-      this.snackBar.open('Failed to remove movie from favorites', 'OK', { duration: 2000 });
-    });
+  deleteFavoriteMovie(movieId: string): void {
+    this.fetchApiData.deleteFavoriteMovie(movieId).subscribe(() => {
+      this.snackBar.open('Removed from favorites', 'OK', {duration: 2000});
+      console.log('del fav called');
+    })
   }
 }
