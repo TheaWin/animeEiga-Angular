@@ -33,7 +33,6 @@ export class UserProfileComponent implements OnInit{
 
   loadUserProfile(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    console.log('Loaded User:', user);
     if (user && user.username) {
       this.userData.username = user.username;
       this.userData.name = user.name;
@@ -54,9 +53,7 @@ export class UserProfileComponent implements OnInit{
   filterFavouriteMovies(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const favoriteMovieIds = user.favoriteMovies || [];
-    console.log("id:", favoriteMovieIds);
     this.favoriteMovies =  this.allMovies.filter(movie => favoriteMovieIds.includes(movie._id));
-    console.log(this.favoriteMovies);
   }
 
   editUser(): void {
@@ -72,17 +69,13 @@ export class UserProfileComponent implements OnInit{
 
   deleteUser(): void {
     const username = JSON.parse(localStorage.getItem('user') || '{}').username;
-    this.fetchApiData.deleteUser(username).subscribe({
-      next: () => {
-        this.snackBar.open('Account deleted successfully', 'OK', { duration: 2000 });
-        this.router.navigate(['welcome']);
-        localStorage.clear();
-      },
-      error: (err) => {
-        console.error('Error:', err);  // Log error for debugging
-        this.snackBar.open('Failed to delete profile', 'OK', { duration: 2000 });
-      }
-    });
+    if (confirm('Are you sure you want to delete your account?')) {
+      this.fetchApiData.deleteUser(username).subscribe((result) => {
+        this.snackBar.open('Account successfully deleted.', 'Success', {duration: 2000,})
+      });
+      this.router.navigate(['welcome']);
+      localStorage.clear();
+    }
   }
 
   isFavorite(movieId: string): boolean {
@@ -95,12 +88,10 @@ export class UserProfileComponent implements OnInit{
         return movie._id !== movieId;
       })
       this.snackBar.open('Removed from favorites', 'OK', {duration: 2000});
-      console.log('del fav called');
     })
   }
 
   openSypnosis(movie: any): void {
-    console.log(movie.Name);
     this.dialog.open(MovieSynopsisComponent, {
       data: {
         name: movie.Name,

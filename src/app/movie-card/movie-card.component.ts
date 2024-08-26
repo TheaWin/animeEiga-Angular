@@ -27,7 +27,6 @@ export class MovieCardComponent implements OnInit{
   getMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((resp: any) => {
       this.movies = resp;
-      console.log('Movies loaded: ', this.movies);
       return this.movies;
     });
   }
@@ -38,7 +37,6 @@ export class MovieCardComponent implements OnInit{
 
   addFavoriteMovie(movieId: string): void {
     this.fetchApiData.addFavoriteMovie(movieId).subscribe(() => {
-      console.log('addFav called');
       this.snackBar.open('Added to favorites', 'OK', {duration: 2000});
     });
   }
@@ -46,56 +44,10 @@ export class MovieCardComponent implements OnInit{
   deleteFavoriteMovie(movieId: string): void {
     this.fetchApiData.deleteFavoriteMovie(movieId).subscribe(() => {
       this.snackBar.open('Removed from favorites', 'OK', {duration: 2000});
-      console.log('del fav called');
     })
   }
-  // getUser(): void {
-  //   const userData = localStorage.getItem('user');
-  //   if (userData) {
-  //     this.user = JSON.parse(userData);
-  //     console.log('User data: ', this.user);
-  //   }
-  // }
-  
-  // updateUser(): void {
-  //     localStorage.setItem('user', JSON.stringify(this.user));
-  // }}
-
-  // filterFavouriteMovies(): void {
-  //   const user = JSON.parse(localStorage.getItem('user') || '{}');
-  //   const favoriteMovieIds = user.favoriteMovies.map((movie: any) => movie._id)  || [];
-  //   console.log("id:", favoriteMovieIds);
-  //   this.favoriteMovies =  this.movies.filter(movie => favoriteMovieIds.includes(movie._id));
-  //   console.log('Filtered favorite movies:', this.favoriteMovies);
-  //   this.movies.forEach(movie => {
-  //     movie.isFavorite = favoriteMovieIds.includes(movie._id);
-  //     if (movie.isFavorite) {
-  //       console.log(`Movie marked as favorite: ${movie.Name}`);
-  //     }
-  //   });
-  // }
-  
-
-  // toggleFavorite(movie: any): void {
-  //   if (movie.isFavorite) {
-  //     // Remove from favorites
-  //     this.fetchApiData.deleteFavouriteMovie(this.user.username, movie._id).subscribe(() => {
-  //       movie.isFavorite = false;
-  //       this.favoriteMovies = this.favoriteMovies.filter(id => id !== movie._id); // Update local list
-  //     });
-  //   } else {
-  //     // Add to favorites
-  //     this.fetchApiData.addFavouriteMovie(this.user.username, movie._id).subscribe(() => {
-  //       movie.isFavorite = true;
-  //       this.favoriteMovies.push(movie._id); // Update local list
-  //       this.updateUser();
-  //     });
-  //   }
-  // }
-
 
   openSypnosis(movie: any): void {
-    console.log(movie.Name);
     this.dialog.open(MovieSynopsisComponent, {
       data: {
         name: movie.Name,
@@ -118,7 +70,6 @@ export class MovieCardComponent implements OnInit{
       return 'Unknown'; // Return 'Unknown' if dateString is empty
     };
   
-    // Open the dialog with the director data
     this.dialog.open(DirectorDetailComponent, {
       data: {
         name: movie.Director.Name,
