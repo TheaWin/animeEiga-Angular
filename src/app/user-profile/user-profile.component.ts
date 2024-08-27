@@ -19,6 +19,13 @@ export class UserProfileComponent implements OnInit{
   isEditing = false;
   userData: any = {username: '', name: '', email:'', birthday: ''};
 
+  /**
+   * Creates an instance of UserProfileComponent.
+   * @param fetchApiData - API data fetching service.
+   * @param dialog - Angular Material dialog service.
+   * @param snackBar - Angular Material snackbar service.
+   * @param router - Angular Router service.
+   */
   constructor(
     public fetchApiData: FetchApiDataService,
     public snackBar: MatSnackBar,
@@ -26,11 +33,18 @@ export class UserProfileComponent implements OnInit{
     private router: Router
   ) { }
 
+  /**
+   * Lifecycle hook that is called after the component's view has been initialized.
+   * Initializes the component by fetching movies and user's data.
+   */
   ngOnInit(): void {
     this.loadUserProfile();
     this.getMovies();
   }
 
+  /**
+   * Fetches the user's details
+   */
   loadUserProfile(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (user && user.username) {
@@ -43,6 +57,9 @@ export class UserProfileComponent implements OnInit{
     }
   }
 
+  /**
+   * Fetches all the movies and run filterFavouriteMovies() function
+   */
   getMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((resp: any) => {
       this.allMovies = resp;
@@ -50,12 +67,18 @@ export class UserProfileComponent implements OnInit{
     });
   }
 
+  /**
+   * Filters the list of all movies to include only the user's favorite movies
+   */
   filterFavouriteMovies(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const favoriteMovieIds = user.favoriteMovies || [];
     this.favoriteMovies =  this.allMovies.filter(movie => favoriteMovieIds.includes(movie._id));
   }
 
+  /**
+   * Update the user's profile information
+   */
   editUser(): void {
     const username = JSON.parse(localStorage.getItem('user') || '{}').username;
     this.fetchApiData.editUser(username).subscribe(result => {
@@ -67,6 +90,9 @@ export class UserProfileComponent implements OnInit{
     });
   }
 
+  /**
+   * Delete the user's account after confirmation
+   */
   deleteUser(): void {
     const username = JSON.parse(localStorage.getItem('user') || '{}').username;
     if (confirm('Are you sure you want to delete your account?')) {
@@ -78,10 +104,19 @@ export class UserProfileComponent implements OnInit{
     }
   }
 
+  /**
+   * Checks if the movie is marked as a favorite by the user
+   * @param movieId - The ID of the movie to check
+   * @returns Returns `true` if the movie is a favorite, otherwise `false`
+   */
   isFavorite(movieId: string): boolean {
     return this.fetchApiData.isFavoriteMovies(movieId);
   }
 
+  /**
+   * Deletes a movie from the user's favorite movie list
+   * @param movieId - The ID of the movie to remove
+   */
   deleteFavoriteMovie(movieId: string): void {
     this.fetchApiData.deleteFavoriteMovie(movieId).subscribe(() => {
       this.favoriteMovies = this.favoriteMovies.filter((movie: any) => {
@@ -91,6 +126,10 @@ export class UserProfileComponent implements OnInit{
     })
   }
 
+  /**
+   * Opens dialog to display movie details
+   * @param movie - The name of the movie
+   */
   openSypnosis(movie: any): void {
     this.dialog.open(MovieSynopsisComponent, {
       data: {
@@ -101,20 +140,23 @@ export class UserProfileComponent implements OnInit{
     });
   }
 
+  /**
+   * Opens dialog to display director details
+   * @param movie - The name of the movie
+   */
   openDirector(movie: any): void {
     // Function to format date as YYYY-MM-DD
     const formatDate = (dateString: string | null) => {
       if (dateString === 'null' || dateString === null) {
-        return 'Null'; // Return 'Unknown' if dateString is 'null' or actual null
+        return 'Null';
       }
       if (dateString) {
         const date = new Date(dateString);
         return date.toISOString().split('T')[0];
       }
-      return 'Unknown'; // Return 'Unknown' if dateString is empty
+      return 'Unknown';
     };
   
-    // Open the dialog with the director data
     this.dialog.open(DirectorDetailComponent, {
       data: {
         name: movie.Director.Name,
@@ -125,6 +167,10 @@ export class UserProfileComponent implements OnInit{
     });
   }
 
+  /**
+   * Opens dialog to display genre details
+   * @param movie The name of the movie
+   */
   openGenre(movie: any): void {
     this.dialog.open(GenreDetailComponent, {
       data: {

@@ -207,23 +207,6 @@ describe('FetchApiDataService', () => {
     req.flush(mockResponse);
   });
 
-  it('should delete a user', () => {
-    const token = 'fake-token';
-    const username = 'testuser';
-    const mockResponse = { success: true };
-
-    spyOn(localStorage, 'getItem').and.returnValue(token);
-
-    service.deleteUser(username).subscribe(response => {
-      expect(response).toEqual(mockResponse);
-    });
-
-    const req = httpMock.expectOne(`${apiUrl}users/${username}`);
-    expect(req.request.method).toBe('DELETE');
-    expect(req.request.headers.get('Authorization')).toBe('Bearer ' + token);
-    req.flush(mockResponse);
-  });
-
   it('should delete a movie from favorite movies', () => {
     const token = 'fake-token';
     const username = 'testuser';

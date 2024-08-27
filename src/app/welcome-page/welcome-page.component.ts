@@ -11,15 +11,25 @@ import { MatDialog } from '@angular/material/dialog';
 export class WelcomePageComponent implements OnInit {
   title = 'AnimeEiga';
 
+  /**
+   * Creates an instance of WelcomePageComponent.
+   * @param dialog - MatDialog to handle dialog opening.
+   */
   constructor(public dialog: MatDialog) { }
   ngOnInit(): void {
   }
+  /**
+   * Opens the user registration dialog.
+   */
   openUserRegistrationDialog(): void {
     this.dialog.open(UserRegistrationFormComponent, {
       // Assigning the dialog a width
       width: '280px'
     });
   }
+  /**
+   * Opens the user Login dialog
+   */
   openUserLoginDialog(): void {
     this.dialog.open(UserLoginFormComponent, {
       width: '280px'

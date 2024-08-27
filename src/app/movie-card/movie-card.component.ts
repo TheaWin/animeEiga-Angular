@@ -12,18 +12,35 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './movie-card.component.scss'
 })
 export class MovieCardComponent implements OnInit{
+  /**
+   * Array to store all movies.
+   */
   movies: any[] = [];
 
+  /**
+   * Constructor of the MovieCardComponent class
+   * Initializes FetchApiDataService, MatDialog, and MatSnackBar.
+   * @param fetchApiData - Service for fetching data from the API
+   * @param dialog - Service for opening dialogs.
+   * @param snackBar - Service for displaying snack bar notifications.
+   */
   constructor(
     public fetchApiData: FetchApiDataService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar
   ) { }
 
+  /**
+   * Lifecycle hook that is called after the component's view has been initialized.
+   * Initializes the component by fetching movies.
+   */
   ngOnInit(): void {
     this.getMovies();
   }
 
+  /**
+   * Fetches all movies from the databse.
+   */
   getMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((resp: any) => {
       this.movies = resp;
@@ -31,22 +48,39 @@ export class MovieCardComponent implements OnInit{
     });
   }
 
+  /**
+   * Checks if the movie is marked as a favorite by the user
+   * @param movieId - The ID of the movie to check
+   * @returns Returns `true` if the movie is a favorite, otherwise `false`
+   */
   isFavorite(movieId: string): boolean {
     return this.fetchApiData.isFavoriteMovies(movieId);
   }
 
+  /**
+   * Adds a movie to the user's favorite movie list
+   * @param movieId - The ID of the movie to add.
+   */
   addFavoriteMovie(movieId: string): void {
     this.fetchApiData.addFavoriteMovie(movieId).subscribe(() => {
       this.snackBar.open('Added to favorites', 'OK', {duration: 2000});
     });
   }
 
+  /**
+   * Deletes a movie from the user's favorite movie list
+   * @param movieId - The ID of the movie to remove
+   */
   deleteFavoriteMovie(movieId: string): void {
     this.fetchApiData.deleteFavoriteMovie(movieId).subscribe(() => {
       this.snackBar.open('Removed from favorites', 'OK', {duration: 2000});
     })
   }
 
+  /**
+   * Opens dialog to display movie details
+   * @param movie - The name of the movie
+   */
   openSypnosis(movie: any): void {
     this.dialog.open(MovieSynopsisComponent, {
       data: {
@@ -57,6 +91,10 @@ export class MovieCardComponent implements OnInit{
     });
   }
 
+  /**
+   * Opens dialog to display director details
+   * @param movie - The name of the movie
+   */
   openDirector(movie: any): void {
     // Function to format date as YYYY-MM-DD
     const formatDate = (dateString: string | null) => {
@@ -80,6 +118,10 @@ export class MovieCardComponent implements OnInit{
     });
   }
 
+  /**
+   * Opens dialog to display genre details
+   * @param movie The name of the movie
+   */
   openGenre(movie: any): void {
     this.dialog.open(GenreDetailComponent, {
       data: {

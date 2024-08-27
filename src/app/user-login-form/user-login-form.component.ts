@@ -11,8 +11,20 @@ import { Router } from '@angular/router';
 })
 export class UserLoginFormComponent implements OnInit {
 
+  /**
+   * Object holding user data for login
+   * @property {string} username -The user's username
+   * @property {string} password - The user's password
+   */
   @Input() userData={username: '', password: '' };
 
+  /**
+   * Creates an instance of UserLoginFormComponent
+   * @param fetchApiData - API data fetching service
+   * @param dialogRef - Angular Material dialog reference.
+   * @param snackBar - Angular Material snackbar service.
+   * @param router - Angular Router service.
+   */
   constructor(
     public fetchApiData: FetchApiDataService,
     public dialogRef: MatDialogRef<UserLoginFormComponent>,
@@ -24,7 +36,11 @@ export class UserLoginFormComponent implements OnInit {
     ngOnInit(): void {
     }
     
-    // This is the function responsible for sending the form inputs to the backend
+    /**
+     * Logs in the user by sending the user data to the backend
+     * 200: Stores user's data and token in local storage, closes the modal dialog, shows a success message, and navigates to the movies page.
+     * 400: Shows an error message.
+     */
     loginUser(): void {
         this.fetchApiData.userLogin(this.userData).subscribe((result) => {
           const user = {
@@ -39,7 +55,7 @@ export class UserLoginFormComponent implements OnInit {
           localStorage.setItem('token', result.token);
           console.log(localStorage.getItem('user'));
           console.log(localStorage.getItem('token'));
-          this.dialogRef.close(); // This will close the modal on success!
+          this.dialogRef.close();
           this.snackBar.open('Login successful!', 'OK', {
             duration: 2000
           });
@@ -49,6 +65,5 @@ export class UserLoginFormComponent implements OnInit {
             duration: 2000
           });
         }); 
-      }
-    
+      }    
       }
