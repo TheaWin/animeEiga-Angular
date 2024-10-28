@@ -42,11 +42,11 @@
               "src/styles.scss"
             ],
             "scripts": [],
-            "baseHref": "/animeEiga-Angular/"
+            "baseHref": "/"
           },
           "configurations": {
             "production": {
-              "baseHref": "/animeEiga-Angular/",
+              "baseHref": "/",
               "budgets": [
                 {
                   "type": "initial",
@@ -109,7 +109,7 @@
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
-            "baseHref": "/animeEiga-Angular/"}
+            "baseHref": "/"}
         }
       }
     }

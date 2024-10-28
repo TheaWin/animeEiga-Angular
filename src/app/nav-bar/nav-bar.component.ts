@@ -37,6 +37,10 @@ export class NavBarComponent implements OnInit{
     this.router.navigate(['profile']);
   }
 
+  public openImage(): void {
+    this.router.navigate(['image']);
+  }
+
   /**
    * Cleared the token and user data from local storage
    * Displays a logout confirmation message

@@ -26,11 +26,13 @@ import { MovieSynopsisComponent } from './movie-synopsis/movie-synopsis.componen
 import { GenreDetailComponent } from './genre-detail/genre-detail.component';
 import { DirectorDetailComponent } from './director-detail/director-detail.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { ImagesAwsComponent } from './images-aws/images-aws.component';
 
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent},
   { path: 'movies', component: MovieCardComponent },
   { path: 'profile', component: UserProfileComponent},
+  { path: 'image', component: ImagesAwsComponent},
   { path: '', redirectTo: 'welcome', pathMatch: 'prefix'},
 ];
 
@@ -45,7 +47,8 @@ const appRoutes: Routes = [
     MovieSynopsisComponent,
     GenreDetailComponent,
     DirectorDetailComponent,
-    NavBarComponent
+    NavBarComponent,
+    ImagesAwsComponent
   ],
   imports: [
     BrowserModule,

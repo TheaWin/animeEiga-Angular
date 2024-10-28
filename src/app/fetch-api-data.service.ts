@@ -5,7 +5,8 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 //Declaring the api url that will provide data for the client app
-const apiUrl = 'https://anime-eiga-84a0980bd564.herokuapp.com/';
+// const apiUrl = 'https://anime-eiga-84a0980bd564.herokuapp.com/';
+const apiUrl = 'http://finalcloudalb-333442050.us-east-1.elb.amazonaws.com/';
 
 /**
  * Injectable service for fetching data from the API
